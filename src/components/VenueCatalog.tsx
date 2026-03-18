@@ -1,16 +1,21 @@
+import getVenues from "@/libs/getVenues";
 import Card from "./Card"
 import Link from "next/link"
 
-export default function VenueCatalog({venueJson} : {venueJson:Object}) {
+export default async function VenueCatalog({venueJson} : {venueJson:VenueJson}) {
+    var venueJsonReady = await venueJson;
+    if (venueJsonReady == undefined) {
+        venueJsonReady = await getVenues()
+    }
     return (
         <>
-            Explore {venueJson.count} models in our catalog
+            Explore {venueJsonReady.count} models in our catalog
             <div style={{
                 margin: "20px", display: "flex", flexDirection: "row", flexWrap: "wrap",
                 justifyContent: "space-around", alignContent: "space-around"
             }}>
                 {
-                    venueJson.data.map((venueItem:Object)=>(
+                    venueJsonReady.data.map((venueItem)=>(
                         <Link key={venueItem.id} href={`/venue/${venueItem.id}`} className="w-1/5">
                         <Card 
                             venueName= {venueItem.name}
